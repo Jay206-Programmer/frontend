@@ -1,0 +1,37 @@
+version: "3.7"
+
+services: 
+
+  web: 
+    build: backend
+    hostname: web
+    container_name: web_container
+    ports:
+      - "8000:8000"
+    command: gunicorn websocket_demo.asgi:application -w 2 -b 0.0.0.0:8000 -k uvicorn.workers.UvicornWorker --log-level info 
+
+  redis:
+    image: redis:6.0.9
+    hostname: redis
+    container_name: redis_container
+    volumes:
+      - ./backend/redis.conf:/usr/local/etc/redis/redis.conf
+    command: --port 6380
+    ports:
+      - "6380:6380"
+    expose:
+      - "6380"
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass e5jyxQy!scbGMzZ2rHEnjMaz%
+
+  frontend:
+    build: frontend
+    hostname: react
+    container_name: react_container
+    volumes:
+      - ./frontend/:/app
+    ports: 
+      - "3000:3000"
+    expose:
+      - "3000"
+    command: npm start
+    
