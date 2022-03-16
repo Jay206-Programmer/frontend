@@ -5,11 +5,13 @@
 }
 
 .dark {
-  --primary-color: turquoise;
-  --border-secondary: white;
+  --primary-color: rgb(119, 0, 255);
+  --border-secondary: rgb(77, 215, 250);
+  ;
   --shadow-width: 3rem;
   background-color: #2d3436;
-  background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%);
+  /* background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%); */
+  background-image: linear-gradient(315deg, #00031f 0%, #000000 25%, #1a0038 50%, #000000 75%, #001411 100%);
 }
 
 .light {
@@ -21,6 +23,23 @@
 }
 
 .main {
-  height: 100vh;
+  min-height: 100vh;
   font-family: 'Smooch Sans', sans-serif;
+  background-size: 250%, 250%;
+  animation: backchange 12s ease-in-out infinite;
+  overflow: hidden;
+}
+
+@keyframes backchange {
+  0% {
+    background-position: right;
+  }
+
+  50% {
+    background-position: left;
+  }
+
+  100% {
+    background-position: right;
+  }
 }

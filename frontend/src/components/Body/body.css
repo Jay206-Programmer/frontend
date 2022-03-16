@@ -5,3 +5,10 @@
     justify-content: space-evenly;
     height: calc(100vh - 6rem);
 }
+
+@media only screen and (max-width: 900px) {
+    .body-container {
+        flex-direction: column;
+        margin-top: 9rem;
+    }
+}

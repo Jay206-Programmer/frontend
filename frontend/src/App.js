@@ -7,7 +7,7 @@ import EventStream from "./lib/sse/eventStream";
 import { useState, useEffect } from "react";
 
 function App() {
-  const [darkmode, setDarkMode] = useState(false);
+  const [darkmode, setDarkMode] = useState(true);
 
   const printEventMessage = (event) => {
     try {

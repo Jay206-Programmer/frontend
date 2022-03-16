@@ -80,6 +80,7 @@ export default function LiveChart({ subtitle }) {
           enabled: false,
         },
       },
+      colors: ['orange', 'rgb(119, 0, 255)'],
       dataLabels: {
         enabled: false,
       },
@@ -103,7 +104,7 @@ export default function LiveChart({ subtitle }) {
         categories: epochs.splice(0,30),
         title: {
           text: "Epochs",
-          offsetY: -10,
+          offsetY: -40,
         },
       },
       yaxis: {

@@ -1,15 +1,22 @@
 export default class EventStream {
-  constructor(url, callbackFunc) {
+  constructor(url, onMessageCallback, onOpenCallback= ()=>{}) {
     this.evtSource = new EventSource(url);
 
     this.evtSource.onopen = (event) => {
-      console.log("Event Stream Opened");
+      console.log(`Event Stream Opened on Url: ${this.evtSource.url}`);
+      onOpenCallback(event)
     };
 
     this.evtSource.onmessage = function (event) {
-      callbackFunc(event);
+      onMessageCallback(event);
     };
   }
-}
 
-// const evtSource = new EventSource("http://localhost:8000/event/")
+  close(){
+    this.evtSource.close()
+  }
+
+  getEventSourceObject(){
+    return this.evtSource
+  }
+}

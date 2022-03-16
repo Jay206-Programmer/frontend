@@ -28,10 +28,11 @@ services:
     hostname: react
     container_name: react_container
     volumes:
-      - ./frontend/:/app
+      - ./frontend/public:/app/public
+      - ./frontend/src:/app/src
     ports: 
       - "3000:3000"
     expose:
       - "3000"
-    command: npm start
+    command: npm run start
     
