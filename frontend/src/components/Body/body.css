@@ -1,0 +1,7 @@
+.body-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    height: calc(100vh - 6rem);
+}

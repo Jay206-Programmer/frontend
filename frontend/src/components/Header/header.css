@@ -1,0 +1,28 @@
+.container {
+    color: var(--primary-color);
+    /* padding: 1rem 2rem; */
+    margin-bottom: 2rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-size: 2rem;
+    font-weight: 500;
+    text-shadow: 0 0 var(--shadow-width) var(--primary-color);
+}
+.container::before {
+    position: absolute;
+    content: '';
+    /* top: 100; */
+    /* left: 1000; */
+    width: 50%;
+    height: 100%;
+    border-bottom: var(--primary-color) 1px solid;
+    box-shadow: 0 0 .2rem var(--border-secondary),
+        0 0 .2rem var(--border-secondary),
+        0 0 1rem var(--primary-color),
+        0 0 0.5rem var(--primary-color),
+        0 0 0.8rem var(--primary-color);
+    clip-path: polygon(30% 0%, 70% 0%, 100% 200%, 0% 200%);
+}
