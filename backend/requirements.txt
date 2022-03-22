@@ -4,7 +4,8 @@ django-cors-headers==3.11.0
 djangorestframework==3.13.1
 gunicorn==20.1.0
 requests 
-uvicorn==0.17.0.post1
-uvicorn[standard]
+# uvicorn==0.17.0.post1
+# uvicorn[standard]
+daphne
 channels-redis
 django-eventstream

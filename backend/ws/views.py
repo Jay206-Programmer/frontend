@@ -47,8 +47,10 @@ class UpdateClass(APIView):
 class SendEvent(APIView):
     
     def get(self, request):
+        user = request.query_params.get('user')
+        if not user: user = 0
         for i in range(10):
-            send_event('test', 'message', {'text': f'hello world {i}'})
+            send_event(f"{user}", 'message', {'text': f'hello world {i}'})
             time.sleep(1)
         
         return HttpResponse("<h2>Status: Complete</h2>")

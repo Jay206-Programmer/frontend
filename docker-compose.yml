@@ -8,7 +8,10 @@ services:
     container_name: web_container
     ports:
       - "8000:8000"
-    command: gunicorn websocket_demo.asgi:application -w 2 -b 0.0.0.0:8000 -k uvicorn.workers.UvicornWorker --log-level info 
+    volumes:
+      - ./backend:/ws
+    # command: gunicorn websocket_demo.asgi:application -w 2 -b 0.0.0.0:8000 -k uvicorn.workers.UvicornWorker --log-level info 
+    command: daphne -b 0.0.0.0 -p 8000 websocket_demo.asgi:application
 
   redis:
     image: redis:6.0.9

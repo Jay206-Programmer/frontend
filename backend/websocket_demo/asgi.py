@@ -18,9 +18,13 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'websocket_demo.settings')
 
 application = ProtocolTypeRouter({
     'http': URLRouter([
-        re_path(r'^events/', AuthMiddlewareStack(
+        
+        # Event Stream Path
+        re_path(r'^events/(?P<channel>.+)/?', AuthMiddlewareStack(
             URLRouter(django_eventstream.routing.urlpatterns)
-        ), { 'channels': ['test'] }),
+        )),
+        
+        # Usual Path
         re_path(r'', get_asgi_application()),
     ]),
     'websocket': AuthMiddlewareStack(

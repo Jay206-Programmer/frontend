@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 
 function App() {
   const [darkmode, setDarkMode] = useState(true);
+  const [count, setCount] = useState(0)
 
   const printEventMessage = (event) => {
     try {
@@ -18,8 +19,13 @@ function App() {
   };
 
   useEffect(() => {
-    const eventObj = new EventStream("http://localhost:8000/events/", printEventMessage)
-  }, [])
+    const eventObj = new EventStream(`http://localhost:8000/events/${count}`, printEventMessage)
+
+    return () => {
+        console.log("Last EventStream Closed")
+        eventObj.close()
+      }
+  }, [count])
   
 
   return (
@@ -29,6 +35,7 @@ function App() {
         <LiveChart subtitle={"Accuracy"} />
         <LiveChart subtitle={"Loss"} />
       </Body>
+      {/* <button onClick={()=>setCount(count+1)}>Click Here</button> */}
     </div>
   );
 }

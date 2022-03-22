@@ -10,6 +10,10 @@ export default class EventStream {
     this.evtSource.onmessage = function (event) {
       onMessageCallback(event);
     };
+
+    this.evtSource.onerror = function (event) {
+      console.log("Something went wrong")
+    }
   }
 
   close(){
