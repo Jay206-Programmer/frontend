@@ -9,3 +9,8 @@ requests
 daphne
 channels-redis
 django-eventstream
+tensorflow
+keras
+pandas
+numpy
+scipy

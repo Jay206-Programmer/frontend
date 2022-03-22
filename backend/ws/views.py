@@ -1,11 +1,17 @@
+#* Library Imports
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
-from .common_ws_utils import WSUtils
-import time
 from django_eventstream import send_event
+import time
 import os
 
+#* Relative imports
+from .common_ws_utils import WSUtils
+from .utils.keras.keras_model import KerasModel
+
+#* Global variable
+KERAS_OBJECT = KerasModel()
 class HttpDemoClass(APIView):
     
     def get(self, request, format=None):
@@ -52,5 +58,16 @@ class SendEvent(APIView):
         for i in range(10):
             send_event(f"{user}", 'message', {'text': f'hello world {i}'})
             time.sleep(1)
+        
+        return HttpResponse("<h2>Status: Complete</h2>")
+    
+class ExecutePipeline(APIView):
+    
+    def get(self, request):
+        user = request.query_params.get('user')
+        # epochs = request.query_params.get('epochs', 150)
+        # batch_size = request.query_params.get('batch_size', 10)
+        
+        KERAS_OBJECT.executePipeline(user=user) #, epoch=epochs, batch_size=batch_size)
         
         return HttpResponse("<h2>Status: Complete</h2>")
