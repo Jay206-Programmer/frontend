@@ -1,110 +1,120 @@
 // import ReactApexCharts from 'react-apexcharts'
 import Chart from "react-apexcharts";
+import ApexCharts from "apexcharts";
 import { useState, useEffect } from "react";
+import { Data } from "./data";
+
+console.log();
 
 export default function LiveChart({ subtitle }) {
+  const Loss = Data.map((dict) => [dict.epoch, dict.data["loss"]]);
 
-  const accuracy = [
-    0.53125, 0.7083333, 0.75, 0.8229167, 0.7916667, 0.7708333, 0.78125,
-    0.7916667, 0.8229167, 0.7916667, 0.875, 0.8020833, 0.8333333,
-    0.8333333, 0.8020833, 0.7916667, 0.78125, 0.8125, 0.875, 0.8645833,
-    0.9270833, 0.8541667, 0.875, 0.84375, 0.8333333, 0.875, 0.8333333,
-    0.8541667, 0.8854167, 0.8229167, 0.8958333, 0.875, 0.875, 0.9166667,
-    0.8541667, 0.8958333, 0.9166667, 0.875, 0.8958333, 0.8645833,
-    0.8854167, 0.8958333, 0.8958333, 0.8541667, 0.9270833, 0.90625,
-    0.8854167, 0.875, 0.8958333, 0.8645833, 0.8645833, 0.9166667,
-    0.8958333, 0.8958333, 0.9375, 0.8958333, 0.9375, 0.9166667, 0.875,
-    0.8958333, 0.9166667, 0.875, 0.875, 0.90625, 0.9270833, 0.9166667,
-    0.9270833, 0.8958333, 0.8958333, 0.9270833, 0.8958333, 0.8854167,
-    0.90625, 0.9270833, 0.90625, 0.8645833, 0.9166667, 0.8958333,
-    0.8958333, 0.9270833, 0.9166667, 0.8958333, 0.9270833, 0.9375,
-    0.8541667, 0.8958333, 0.8958333, 0.9479167, 0.90625, 0.9166667,
-    0.8854167, 0.8854167, 0.9375, 0.8958333, 0.9166667, 0.8958333,
-    0.9270833, 0.9479167, 0.9270833, 0.8854167,
-  ]
+  const Accuracy = Data.map((dict) => [dict.epoch, dict.data["accuracy"]]);
 
-  const validation = [
-    0.875, 0.875, 0.875, 0.875, 0.875, 0.875, 0.875, 0.8333333134651184,
-    0.875, 0.875, 0.875, 0.875, 0.875, 0.875, 0.875, 0.875, 0.875, 0.875,
-    0.875, 0.875, 0.875, 0.875, 0.875, 0.875, 0.875, 0.875, 0.875, 0.875,
-    0.875, 0.9583333134651184, 0.9583333134651184, 0.9166666865348816,
-    0.9583333134651184, 0.9583333134651184, 0.9583333134651184, 0.875,
-    0.875, 0.9583333134651184, 0.9583333134651184, 0.9583333134651184,
-    0.9583333134651184, 0.9583333134651184, 0.9583333134651184,
-    0.9166666865348816, 0.9583333134651184, 0.9583333134651184,
-    0.9583333134651184, 0.9583333134651184, 0.9583333134651184,
-    0.9583333134651184, 0.9583333134651184, 0.9583333134651184,
-    0.9166666865348816, 0.9583333134651184, 0.9583333134651184,
-    0.9583333134651184, 0.9583333134651184, 0.9166666865348816,
-    0.9166666865348816, 0.9166666865348816, 0.9166666865348816,
-    0.9583333134651184, 0.9583333134651184, 0.9583333134651184,
-    0.9583333134651184, 0.9166666865348816, 0.9166666865348816,
-    0.9166666865348816, 0.875, 0.9166666865348816, 0.9166666865348816,
-    0.9166666865348816, 0.875, 0.9166666865348816, 0.9166666865348816,
-    0.9166666865348816, 0.9166666865348816, 0.9166666865348816,
-    0.9166666865348816, 0.9166666865348816, 0.9166666865348816,
-    0.9166666865348816, 0.9166666865348816, 0.9166666865348816,
-    0.9166666865348816, 0.9166666865348816, 0.9166666865348816,
-    0.9166666865348816, 0.9166666865348816, 0.9166666865348816,
-    0.9166666865348816, 0.9166666865348816, 0.9583333134651184,
-    0.9166666865348816, 0.9166666865348816, 0.9166666865348816,
-    0.9166666865348816, 0.9166666865348816, 0.9166666865348816,
-    0.9166666865348816,
-  ]
+  const [start, setStart] = useState(0);
 
-  const epochs = [
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-    20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
-    37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
-    54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70,
-    71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87,
-    88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99,
-  ]
-
-  const [options, setOptions] = useState({
+  //* Series Data
+  const [series, setSeries] = useState({
     series: [
       {
-        name: "Train",
-        data: accuracy.splice(0,30),
+        name: "Loss",
+        data: [],
       },
       {
-        name: "Validation",
-        data: validation.splice(0,30),
+        name: "Accuracy",
+        data: [],
       },
     ],
+  });
+
+  //* Graph Options
+  const [options, setOptions] = useState({
     options: {
       chart: {
+        id: "realtime",
         type: "area",
         height: 350,
         zoom: {
           enabled: false,
         },
+        animations: {
+          enabled: true,
+          easing: "linear",
+          // speed: 1000,
+          // animateGradually: {
+          //   enabled: false,
+          //   delay: 150,
+          // },
+          dynamicAnimation: {
+            enabled: true,
+            speed: 550,
+          },
+        },
+        toolbar: {
+          show: false,
+        },
       },
-      colors: ['orange', 'rgb(119, 0, 255)'],
+      colors: ["orange", "rgb(119, 0, 255)"],
       dataLabels: {
         enabled: false,
       },
       stroke: {
         curve: "smooth",
       },
-      toolbar: {
-        show: true,
+      markers: {
+        size: 0,
+        strokeColors: ["orange", "rgb(119, 0, 255)"],
+        // discrete: [
+        //   {
+        //     seriesIndex: 0,
+        //     strokeColor: "orange",
+        //     // fillColor: 'rgb(119, 0, 255)',
+        //     dataPointIndex: start-2,
+        //     size: 4,
+        //     shape: "circle", // "circle" | "square" | "rect"
+        //   },
+        //   {
+        //     seriesIndex: 1,
+        //     strokeColor: "rgb(119, 0, 255)",
+        //     // fillColor: 'rgb(119, 0, 255)',
+        //     dataPointIndex: start-2,
+        //     size: 4,
+        //     shape: "circle", // "circle" | "square" | "rect"
+        //   },
+        // ],
       },
       title: {
         text: subtitle,
-        align: "left",
+        align: "center",
+        offsetY: 10,
+        style: {
+          fontSize: "24px",
+          fontWeight: 500,
+          fontFamily: "Smooch Sans",
+          color: "rgb(119, 0, 255)",
+        },
       },
-      // subtitle: {
-      //   text: subtitle,
-      //   align: "left",
-      // },
-      // labels: [1, 20, 3, 4, 5, 6],
+      grid: {
+        show: true,
+        borderColor: "gray",
+      },
       xaxis: {
         type: "number",
-        categories: epochs.splice(0,30),
+        // categories: epochs,
         title: {
           text: "Epochs",
-          offsetY: -40,
+          offsetY: -8,
+          // offsetX: 20,
+        },
+        labels: {
+          rotate: 0,
+        },
+        tickAmount: 5,
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
         },
       },
       yaxis: {
@@ -112,21 +122,64 @@ export default function LiveChart({ subtitle }) {
         min: 0,
         max: 1,
         decimalsInFloat: 3,
-        // labels: {
-        //   formatter: (value) => { return value }
-        // }
+        tickAmount: 5,
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+        tooltip: {
+          enabled: false,
+        },
       },
-      // legend: {
-      //   horizontalAlign: "left",
-      //   show: false,
-      // },
     },
   });
+
+  const resetData = () => {
+    let [loss, accuracy] = series.series;
+    const len = loss["data"].length;
+    loss["data"] = loss["data"].slice(len - 10, len);
+    accuracy["data"] = accuracy["data"].slice(len - 10, len);
+
+    setSeries({
+      series: [loss, accuracy],
+    });
+  };
+
+  const updateData = (pointer) => {
+    let [loss, accuracy] = series.series;
+    loss["data"].push(Loss[pointer]);
+    accuracy["data"].push(Accuracy[pointer]);
+
+    setSeries({ series: [loss, accuracy] });
+
+    // stop data array from leaking memory and growing too big
+    // if (loss["data"].length > 20) resetData();
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (start <= 149) {
+        setStart(start + 1);
+        updateData(start);
+      } else {
+        clearInterval(interval);
+      }
+    }, 500);
+    return () => {
+      window.clearInterval(interval); // clear the interval in the cleanup function
+    };
+  }, [start]);
+
+  useEffect(() => {
+    ApexCharts.exec("realtime", "updateSeries", series.series);
+  }, [series]);
 
   return (
     <Chart
       options={options.options}
-      series={options.series}
+      series={series.series}
       type="area"
       height={350}
       width="150%"

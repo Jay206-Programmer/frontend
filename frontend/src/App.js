@@ -12,7 +12,7 @@ function App() {
 
   const printEventMessage = (event) => {
     try {
-      console.log(`Message: ${event.data}`);
+      console.log(event.data);
     } catch {
       console.log("SSE Failed");
     }
@@ -32,8 +32,8 @@ function App() {
     <div className={`main ${darkmode ? "dark" : "light"}`}>
       <Header onClick={() => setDarkMode(!darkmode)} />
       <Body>
-        <LiveChart subtitle={"Accuracy"} />
-        <LiveChart subtitle={"Loss"} />
+        <LiveChart subtitle={"Accuracy - Loss"} />
+        {/* <LiveChart subtitle={"Loss"} /> */}
       </Body>
       {/* <button onClick={()=>setCount(count+1)}>Click Here</button> */}
     </div>

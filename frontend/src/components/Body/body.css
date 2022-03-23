@@ -9,6 +9,6 @@
 @media only screen and (max-width: 900px) {
     .body-container {
         flex-direction: column;
-        margin-top: 9rem;
+        /* margin-top: 9rem; */
     }
 }
