@@ -3,30 +3,41 @@ import Header from "./components/Header/header";
 import LiveChart from "./components/Charts/chart";
 import Body from "./components/Body/body";
 import EventStream from "./lib/sse/eventStream";
+import { useStore } from "./lib/zustand/store";
 
 import { useState, useEffect } from "react";
 
 function App() {
   const [darkmode, setDarkMode] = useState(true);
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
+  // * Global States
+  const updateMatrics = useStore((state) => state.updateMetrics);
+  
   const printEventMessage = (event) => {
     try {
-      console.log(event.data);
+      const data = JSON.parse(event.data);
+      const epoch = data["epoch"];
+      const accuracy = data["data"]["accuracy"];
+      const loss = data["data"]["loss"];
+      
+      updateMatrics(epoch, accuracy, loss);
     } catch {
       console.log("SSE Failed");
     }
   };
 
   useEffect(() => {
-    const eventObj = new EventStream(`http://localhost:8000/events/${count}`, printEventMessage)
+    const eventObj = new EventStream(
+      `http://localhost:8000/events/${count}`,
+      printEventMessage
+    );
 
     return () => {
-        console.log("Last EventStream Closed")
-        eventObj.close()
-      }
-  }, [count])
-  
+      console.log("Last EventStream Closed");
+      eventObj.close();
+    };
+  }, [count]);
 
   return (
     <div className={`main ${darkmode ? "dark" : "light"}`}>

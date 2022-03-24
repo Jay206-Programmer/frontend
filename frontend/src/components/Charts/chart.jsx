@@ -1,31 +1,28 @@
-// import ReactApexCharts from 'react-apexcharts'
+//* Library Imports
 import Chart from "react-apexcharts";
 import ApexCharts from "apexcharts";
 import { useState, useEffect } from "react";
-import { Data } from "./data";
 
-console.log();
+//* Relative imports
+import { useStore } from "../../lib/zustand/store";
 
 export default function LiveChart({ subtitle }) {
-  const Loss = Data.map((dict) => [dict.epoch, dict.data["loss"]]);
-
-  const Accuracy = Data.map((dict) => [dict.epoch, dict.data["accuracy"]]);
-
-  const [start, setStart] = useState(0);
+  
+  //* Global States
+  const Accuracy = useStore((state) => state.accuracy);
+  const Loss = useStore((state) => state.loss);
 
   //* Series Data
-  const [series, setSeries] = useState({
-    series: [
-      {
-        name: "Loss",
-        data: [],
-      },
-      {
-        name: "Accuracy",
-        data: [],
-      },
-    ],
-  });
+  let series = [
+    {
+      name: "Loss",
+      data: Loss.slice(-30),
+    },
+    {
+      name: "Accuracy",
+      data: Accuracy.slice(-30),
+    },
+  ];
 
   //* Graph Options
   const [options, setOptions] = useState({
@@ -39,7 +36,7 @@ export default function LiveChart({ subtitle }) {
         },
         animations: {
           enabled: true,
-          easing: "linear",
+          easing: "easeinout",
           // speed: 1000,
           // animateGradually: {
           //   enabled: false,
@@ -47,7 +44,7 @@ export default function LiveChart({ subtitle }) {
           // },
           dynamicAnimation: {
             enabled: true,
-            speed: 550,
+            speed: 300,
           },
         },
         toolbar: {
@@ -69,7 +66,7 @@ export default function LiveChart({ subtitle }) {
         //     seriesIndex: 0,
         //     strokeColor: "orange",
         //     // fillColor: 'rgb(119, 0, 255)',
-        //     dataPointIndex: start-2,
+        //     dataPointIndex: 30,
         //     size: 4,
         //     shape: "circle", // "circle" | "square" | "rect"
         //   },
@@ -77,7 +74,7 @@ export default function LiveChart({ subtitle }) {
         //     seriesIndex: 1,
         //     strokeColor: "rgb(119, 0, 255)",
         //     // fillColor: 'rgb(119, 0, 255)',
-        //     dataPointIndex: start-2,
+        //     dataPointIndex: 30,
         //     size: 4,
         //     shape: "circle", // "circle" | "square" | "rect"
         //   },
@@ -136,53 +133,17 @@ export default function LiveChart({ subtitle }) {
     },
   });
 
-  const resetData = () => {
-    let [loss, accuracy] = series.series;
-    const len = loss["data"].length;
-    loss["data"] = loss["data"].slice(len - 10, len);
-    accuracy["data"] = accuracy["data"].slice(len - 10, len);
-
-    setSeries({
-      series: [loss, accuracy],
-    });
-  };
-
-  const updateData = (pointer) => {
-    let [loss, accuracy] = series.series;
-    loss["data"].push(Loss[pointer]);
-    accuracy["data"].push(Accuracy[pointer]);
-
-    setSeries({ series: [loss, accuracy] });
-
-    // stop data array from leaking memory and growing too big
-    // if (loss["data"].length > 20) resetData();
-  };
-
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (start <= 149) {
-        setStart(start + 1);
-        updateData(start);
-      } else {
-        clearInterval(interval);
-      }
-    }, 500);
-    return () => {
-      window.clearInterval(interval); // clear the interval in the cleanup function
-    };
-  }, [start]);
-
-  useEffect(() => {
-    ApexCharts.exec("realtime", "updateSeries", series.series);
-  }, [series]);
+    ApexCharts.exec("realtime", "updateSeries", series);
+  }, [Loss]);
 
   return (
     <Chart
       options={options.options}
-      series={series.series}
+      series={series}
       type="area"
       height={350}
       width="150%"
-    />
+    /> 
   );
 }
